@@ -4,12 +4,14 @@ import com.example.template.StateMachineTemplateMod;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class StateMachineTemplateClient implements ClientModInitializer {
-    private static final String KEY_CATEGORY = "category.statemachine-toggle-template";
+    private static final KeyMapping.Category KEY_CATEGORY =
+            KeyMapping.Category.register(Identifier.fromNamespaceAndPath("statemachine-toggle-template", "general"));
 
     private enum ModState {
         INITIALIZING,
@@ -21,13 +23,13 @@ public class StateMachineTemplateClient implements ClientModInitializer {
 
     private static ModState state = ModState.INITIALIZING;
     private static boolean toggleEnabled = false;
-    private static KeyBinding toggleKey;
+    private static KeyMapping toggleKey;
 
     @Override
     public void onInitializeClient() {
-        toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        toggleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.statemachine-toggle-template.toggle",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_RIGHT_BRACKET,
                 KEY_CATEGORY
         ));
@@ -50,7 +52,7 @@ public class StateMachineTemplateClient implements ClientModInitializer {
             }
             case IDLE -> {
                 log("Entering state loop: IDLE");
-                if (toggleKey.wasPressed()) {
+                if (toggleKey.consumeClick()) {
                     setState(ModState.STOPPING);
                 }
             }
@@ -61,7 +63,7 @@ public class StateMachineTemplateClient implements ClientModInitializer {
             }
             case STOPPED -> {
                 log("Entering state loop: STOPPED");
-                if (toggleKey.wasPressed()) {
+                if (toggleKey.consumeClick()) {
                     setState(ModState.STARTING);
                 }
             }
