@@ -5,7 +5,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
@@ -85,5 +88,13 @@ public class StateMachineTemplateClient implements ClientModInitializer {
 
     private static void log(String message) {
         StateMachineTemplateMod.LOGGER.info("[ClientStateMachine] {}", message);
+
+        Minecraft client = Minecraft.getInstance();
+        if (client.player != null) {
+            Component chatMessage = Component.literal("[StateMachine]")
+                    .withStyle(ChatFormatting.AQUA)
+                    .append(Component.literal(" " + message).withStyle(ChatFormatting.GRAY));
+            client.player.displayClientMessage(chatMessage, false);
+        }
     }
 }
