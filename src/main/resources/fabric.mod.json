@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "statemachine-toggle-template",
+  "version": "${version}",
+  "name": "State Machine Toggle Template",
+  "description": "Fabric mod template with a key-driven state machine toggle.",
+  "authors": [
+    "Template Author"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.example.template.StateMachineTemplateMod"
+    ],
+    "client": [
+      "com.example.template.client.StateMachineTemplateClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
